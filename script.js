@@ -7,25 +7,34 @@ let noClickCount = 0;
 // ---- Elements ----
 const envelope      = document.getElementById('envelope');
 const envelopeFlap  = document.getElementById('envelopeFlap');
-const letter        = document.getElementById('letter');
 const btnGroup      = document.getElementById('btnGroup');
 const btnYes        = document.getElementById('btnYes');
 const btnNo         = document.getElementById('btnNo');
 const warningMsg    = document.getElementById('warningMsg');
 const forgivenScreen= document.getElementById('forgivenScreen');
+const letterModal   = document.getElementById('letterModal');
+const closeModalBtn = document.getElementById('closeModalBtn');
 
 // ---- Open letter on envelope click ----
 document.getElementById('envelopeWrapper').addEventListener('click', () => {
-  if (letterOpened) return;
-  letterOpened = true;
-
   // 1. Flip flap open
   envelopeFlap.classList.add('open');
 
-  // 2. Rise letter after small delay
+  // 2. Show full letter modal popup overlay smoothly
   setTimeout(() => {
-    letter.classList.add('risen');
+    letterModal.classList.add('show');
   }, 400);
+});
+
+// Close modal when clicking close button or background overlay
+closeModalBtn.addEventListener('click', () => {
+  letterModal.classList.remove('show');
+});
+
+letterModal.addEventListener('click', (e) => {
+  if (e.target === letterModal) {
+    letterModal.classList.remove('show');
+  }
 });
 
 // ---- No button ----
@@ -65,6 +74,7 @@ btnNo.addEventListener('animationend', () => {
 
 // ---- Yes button ----
 function handleYes() {
+  letterModal.classList.remove('show');
   launchConfetti();
   setTimeout(() => {
     forgivenScreen.classList.add('show');

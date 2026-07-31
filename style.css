@@ -187,7 +187,7 @@ body {
   60%       { transform: scale(0.95); }
 }
 
-/* ===== LETTER ===== */
+/* ===== LETTER INSIDE ENVELOPE ===== */
 .letter {
   position: absolute;
   left: 8px;
@@ -198,77 +198,120 @@ body {
   border-radius: 6px;
   z-index: 2;
   transform: translateY(0);
-  transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.2s,
-              height 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+  transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
   overflow: hidden;
   box-shadow: inset 0 0 0 2px rgba(255, 133, 162, 0.3);
 }
 
-/* Letter rises when opened — goes well above envelope */
+/* Letter rises slightly when opened */
 .letter.risen {
-  transform: translateY(calc(-190px));
-  height: 380px;
-  z-index: 10;
-  box-shadow: 0 20px 60px rgba(230, 57, 70, 0.25), inset 0 0 0 2px rgba(255, 133, 162, 0.3);
-  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s,
-              height 1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+  transform: translateY(-80px);
 }
 
 .letter-content {
-  padding: 20px 20px 16px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   height: 100%;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #ffb3c6 transparent;
+  overflow: hidden;
 }
 
 .letter-greeting {
   font-family: var(--font-script);
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   color: var(--red-heart);
+  font-weight: 700;
 }
 
 .letter-body {
-  font-size: 0.88rem;
-  color: #555;
-  line-height: 1.75;
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.7;
   font-family: var(--font-body);
 }
 
 .letter-sign {
   font-family: var(--font-script);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: var(--red-heart);
   margin-top: auto;
   text-align: right;
+  font-weight: 700;
 }
 
-/* Lined paper effect */
-.letter-content::before {
-  content: '';
+/* ===== FULL LETTER MODAL OVERLAY ===== */
+.letter-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.letter-modal-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.letter-modal-card {
+  background: var(--letter-bg);
+  width: 100%;
+  max-width: 480px;
+  max-height: 85vh;
+  border-radius: 16px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3), 0 0 0 3px #ffb3c6;
+  padding: 32px 28px 28px;
+  position: relative;
+  transform: scale(0.8) translateY(30px);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.letter-modal-overlay.show .letter-modal-card {
+  transform: scale(1) translateY(0);
+}
+
+.modal-close-btn {
   position: absolute;
-  left: 48px;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: rgba(255,150,170,0.3);
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #ff4d6d;
+  cursor: pointer;
+  line-height: 1;
+  transition: transform 0.2s ease;
 }
 
-/* ===== OPEN HINT ===== */
-.open-hint {
-  font-size: 0.8rem;
-  color: #c9184a;
-  opacity: 0.75;
-  animation: blink 1.5s ease-in-out infinite;
-  margin-top: -12px;
+.modal-close-btn:hover {
+  transform: scale(1.2) rotate(90deg);
 }
 
-@keyframes blink {
-  0%, 100% { opacity: 0.75; }
-  50%       { opacity: 0.2; }
+.modal-letter-content {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-right: 6px;
+}
+
+.modal-letter-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-letter-content::-webkit-scrollbar-thumb {
+  background: #ffb3c6;
+  border-radius: 10px;
 }
 
 /* ===== BUTTONS ===== */
@@ -332,19 +375,20 @@ body {
 /* ===== WARNING MESSAGE ===== */
 .warning-msg {
   font-family: var(--font-script);
-  font-size: clamp(1rem, 4vw, 1.3rem);
+  font-size: clamp(1.1rem, 4.5vw, 1.4rem);
   color: #c9184a;
   text-align: center;
-  background: rgba(255,255,255,0.75);
+  background: rgba(255,255,255,0.85);
   backdrop-filter: blur(8px);
   border: 2px solid #ffb3c6;
   border-radius: 16px;
   padding: 14px 22px;
-  max-width: 360px;
+  max-width: 380px;
   opacity: 0;
   transform: translateY(10px);
   transition: all 0.4s ease;
   pointer-events: none;
+  box-shadow: 0 8px 24px rgba(201, 24, 74, 0.15);
 }
 
 .warning-msg.show {
@@ -386,21 +430,16 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.forgiven-emoji {
-  font-size: clamp(4rem, 15vw, 6rem);
-  animation: heartBeat 1s ease-in-out infinite;
-}
-
 .forgiven-title {
   font-family: var(--font-script);
-  font-size: clamp(2rem, 8vw, 3.5rem);
+  font-size: clamp(2.2rem, 8vw, 3.5rem);
   color: var(--red-heart);
 }
 
 .forgiven-text {
   font-family: var(--font-body);
-  font-size: clamp(1rem, 3.5vw, 1.25rem);
-  color: #555;
+  font-size: clamp(1.1rem, 4vw, 1.35rem);
+  color: #444;
 }
 
 /* ===== CONFETTI ===== */
@@ -433,6 +472,10 @@ body {
 
   .scene {
     gap: 22px;
+  }
+
+  .letter-modal-card {
+    padding: 24px 20px 20px;
   }
 }
 

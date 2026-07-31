@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tha Thứ Cho Anh Nhé! </title>
+  <title>Tha Thứ Cho Anh Nhé!</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link
     href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Nunito:wght@400;600;700&display=swap"
@@ -25,38 +25,14 @@
     <!-- 3D Envelope -->
     <div class="envelope-wrapper" id="envelopeWrapper">
       <div class="envelope" id="envelope">
-
         <!-- Envelope back -->
         <div class="envelope-back"></div>
-
         <!-- Envelope flap -->
         <div class="envelope-flap" id="envelopeFlap"></div>
-
-        <!-- Letter inside -->
-        <div class="letter" id="letter">
-          <div class="letter-content">
-            <p class="letter-greeting"> Em yêu,</p>
-            <p class="letter-body">
-              Anh xin lỗi vì đã nói một cách không suy nghĩ đến tâm trạng và tình cảnh hiện giờ của 2 đứa. Anh thật sự
-              đã hối lỗi và rất muốn được em tha thứ về lỗi lầm của mình.
-            </p>
-            <p class="letter-body">
-              Anh thật sự nghĩ là mình cần em đồng hành với mình trên đoạn đường sắp tới mặc dù còn quá sớm để kết
-              luận... Nhưng cảm giác và cảm xúc của anh từ hôm qua đã là như thế, khó hiểu mà he.
-            </p>
-            <p class="letter-body">
-              Anh xin cam kết là không trêu hay chọc em một cách vô duyên và thiếu suy nghĩ như vậy một lần nào nữa. Chỉ
-              mong em sẽ sớm tha lỗi và sẽ phản hồi anh!
-            </p>
-            <p class="letter-sign">Mãi giữ trọn lời với em <br />— Anh</p>
-          </div>
-        </div>
-
         <!-- Envelope front body -->
         <div class="envelope-front">
           <div class="envelope-heart">💕</div>
         </div>
-
       </div>
     </div>
 
@@ -74,12 +50,31 @@
     <!-- Forgiven screen -->
     <div class="forgiven-screen" id="forgivenScreen">
       <div class="forgiven-content">
-
         <h1 class="forgiven-title">Cảm ơn em yêu!</h1>
-        <p class="forgiven-text">Anh hứa sẽ không bao giờ làm em buồn nữa </p>
+        <p class="forgiven-text">Anh hứa sẽ không bao giờ làm em buồn nữa</p>
       </div>
     </div>
 
+  </div>
+
+  <!-- Full Letter Modal Overlay (Bung ra đẹp mắt khi mở phong bì) -->
+  <div class="letter-modal-overlay" id="letterModal">
+    <div class="letter-modal-card">
+      <button class="modal-close-btn" id="closeModalBtn">&times;</button>
+      <div class="modal-letter-content">
+        <p class="letter-greeting">💕 Em yêu,</p>
+        <p class="letter-body">
+          Anh xin lỗi vì đã nói một cách không suy nghĩ đến tâm trạng và tình cảnh hiện giờ của 2 đứa. Anh thật sự đã hối lỗi và rất muốn được em tha thứ về lỗi lầm của mình.
+        </p>
+        <p class="letter-body">
+          Anh thật sự nghĩ là mình cần em đồng hành với mình trên đoạn đường sắp tới mặc dù còn quá sớm để kết luận... Nhưng cảm giác và cảm xúc của anh từ hôm qua đã là như thế, khó hiểu mà he.
+        </p>
+        <p class="letter-body">
+          Anh xin cam kết là không trêu hay chọc em một cách vô duyên và thiếu suy nghĩ như vậy một lần nào nữa. Chỉ mong em sẽ sớm tha lỗi và sẽ phản hồi anh!
+        </p>
+        <p class="letter-sign">Mãi giữ trọn lời với em <br />— Anh</p>
+      </div>
+    </div>
   </div>
 
   <script src="script.js"></script>
