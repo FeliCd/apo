@@ -1,83 +1,66 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tha Thứ Cho Anh Nhé!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f6eee5" />
+  <meta name="description" content="Một lá thư gửi Thảo Nhi, với tất cả sự chân thành của anh." />
+  <title>Gửi Thảo Nhi — Từ tận lòng anh</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Nunito:wght@400;600;700&display=swap"
-    rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
 </head>
-
 <body>
-  <!-- Floating hearts background -->
-  <div class="hearts-bg" id="heartsBg"></div>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+  <div id="particles" class="particles" aria-hidden="true"></div>
+  <main class="scene">
+    <header class="intro">
+      <p class="eyebrow">MỘT LÁ THƯ GỬI RIÊNG EM</p>
+      <h1>Thảo Nhi<span>thương mến,</span></h1>
+      <p class="intro-text">Có những điều anh muốn nói,<br />bằng tất cả sự chân thành.</p>
+    </header>
 
-  <!-- Main scene -->
-  <div class="scene" id="scene">
+    <button class="envelope-wrapper" id="openLetter" aria-label="Mở lá thư gửi Thảo Nhi" aria-haspopup="dialog">
+      <span class="envelope">
+        <span class="envelope-back"></span>
+        <span class="letter-peek"><span>Gửi Thảo Nhi</span><span class="peek-line"></span><span class="peek-line short"></span></span>
+        <span class="envelope-front"></span>
+        <span class="envelope-flap"></span>
+        <span class="envelope-address">Gửi người anh thương</span>
+        <span class="wax-seal" aria-hidden="true">N</span>
+      </span>
+    </button>
+    <button class="open-link" id="openLetterText">Mở lá thư của anh <span aria-hidden="true">↗</span></button>
+    <footer class="page-footer"><span aria-hidden="true">♡</span> Từ tận lòng anh, gửi đến em.</footer>
+  </main>
 
-    <!-- Outside label -->
-    <p class="outside-label" id="outsideLabel">💌 tha lỗi cho anh nhé</p>
-
-    <!-- 3D Envelope -->
-    <div class="envelope-wrapper" id="envelopeWrapper">
-      <div class="envelope" id="envelope">
-        <!-- Envelope back -->
-        <div class="envelope-back"></div>
-        <!-- Envelope flap -->
-        <div class="envelope-flap" id="envelopeFlap"></div>
-        <!-- Envelope front body -->
-        <div class="envelope-front">
-          <div class="envelope-heart">💕</div>
+  <dialog class="letter-dialog" id="letterModal" aria-labelledby="letterTitle">
+    <div class="letter-shell">
+      <button class="close-button" id="closeModalBtn" aria-label="Đóng lá thư">×</button>
+      <article class="letter-paper">
+        <p class="eyebrow">GỬI NGƯỜI ANH THƯƠNG</p>
+        <h2 id="letterTitle">Thảo Nhi của anh,</h2>
+        <div class="letter-body">
+          <p>Anh xin lỗi em nhiều, vì những sai lầm non nớt trước đó của mình đã và đang làm ảnh hưởng đến em của hiện tại.</p>
+          <p>Nhưng anh cũng biết anh may mắn đến nhường nào khi anh được em yêu thương trong khi bản thân không xứng đáng được như thế. Anh cũng biết là anh sai nhiều nhưng thật sự là anh đang cố gắng từng ngày, từng ngày để tốt lên, để xứng đáng với em.</p>
+          <blockquote>Anh xin thề với em là trong đầu, trong tim, trong lòng, trong tâm can của anh chỉ có duy nhất mỗi em.</blockquote>
+          <p>Chuyện của quá khứ anh đã gác lại và mong muốn hướng đến một tương lai cùng em.</p>
+          <p>Anh mong em bình tĩnh lại hơn, an tâm lại hơn và tiếp tục theo dõi hành trình cố gắng thay đổi của anh.</p>
         </div>
-      </div>
+        <div class="signature"><span>Thương em thật nhiều,</span><strong>Anh</strong></div>
+        <section class="response" aria-label="Lời hồi đáp">
+          <p class="response-prompt">Anh mong được cùng em bước tiếp.</p>
+          <div class="actions">
+            <button class="button button-primary" id="btnYes">Em tha lỗi cho anh <span aria-hidden="true">♡</span></button>
+            <span class="time-button-slot"><button class="button button-secondary" id="btnNo">Em cần thêm thời gian</button></span>
+          </div>
+          <div class="reply" id="reply" role="status" aria-live="polite" hidden></div>
+        </section>
+      </article>
     </div>
-
-    <!-- Buttons -->
-    <div class="btn-group" id="btnGroup">
-      <button class="btn btn-yes" id="btnYes" onclick="handleYes()">✅ Có</button>
-      <button class="btn btn-no" id="btnNo" onclick="handleNo()">❌ Không</button>
-    </div>
-
-    <!-- Warning message -->
-    <div class="warning-msg" id="warningMsg">
-      năn nỉ em đóa, tha lỗi choa anh điii maa
-    </div>
-
-    <!-- Forgiven screen -->
-    <div class="forgiven-screen" id="forgivenScreen">
-      <div class="forgiven-content">
-        <h1 class="forgiven-title">Cảm ơn em yêu!</h1>
-        <p class="forgiven-text">Anh hứa sẽ không bao giờ làm em buồn nữa</p>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Full Letter Modal Overlay (Bung ra đẹp mắt khi mở phong bì) -->
-  <div class="letter-modal-overlay" id="letterModal">
-    <div class="letter-modal-card">
-      <button class="modal-close-btn" id="closeModalBtn">&times;</button>
-      <div class="modal-letter-content">
-        <p class="letter-greeting">💕 Em yêu,</p>
-        <p class="letter-body">
-          Anh xin lỗi vì đã nói một cách không suy nghĩ đến tâm trạng và tình cảnh hiện giờ của 2 đứa. Anh thật sự đã hối lỗi và rất muốn được em tha thứ về lỗi lầm của mình.
-        </p>
-        <p class="letter-body">
-          Anh thật sự nghĩ là mình cần em đồng hành với mình trên đoạn đường sắp tới mặc dù còn quá sớm để kết luận... Nhưng cảm giác và cảm xúc của anh từ hôm qua đã là như thế, khó hiểu mà he.
-        </p>
-        <p class="letter-body">
-          Anh xin cam kết là không trêu hay chọc em một cách vô duyên và thiếu suy nghĩ như vậy một lần nào nữa. Chỉ mong em sẽ sớm tha lỗi và sẽ phản hồi anh!
-        </p>
-        <p class="letter-sign">Mãi giữ trọn lời với em <br />— Anh</p>
-      </div>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
+  </dialog>
 </body>
-
 </html>

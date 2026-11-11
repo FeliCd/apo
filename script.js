@@ -1,125 +1,157 @@
-/* ===== script.js ===== */
+const envelopeButton = document.getElementById('openLetter');
+const openTextButton = document.getElementById('openLetterText');
+const letterModal = document.getElementById('letterModal');
+const closeButton = document.getElementById('closeModalBtn');
+const yesButton = document.getElementById('btnYes');
+const timeButton = document.getElementById('btnNo');
+const reply = document.getElementById('reply');
+const particles = document.getElementById('particles');
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+let opening = false;
+let lastOpener = envelopeButton;
+let celebrationTimer;
 
-// ---- State ----
-let letterOpened = false;
-let noClickCount = 0;
+function resetTimeButton() {
+  timeButton.classList.remove('escaping');
+  timeButton.style.removeProperty('left');
+  timeButton.style.removeProperty('top');
+  timeButton.style.removeProperty('width');
+}
 
-// ---- Elements ----
-const envelope      = document.getElementById('envelope');
-const envelopeFlap  = document.getElementById('envelopeFlap');
-const btnGroup      = document.getElementById('btnGroup');
-const btnYes        = document.getElementById('btnYes');
-const btnNo         = document.getElementById('btnNo');
-const warningMsg    = document.getElementById('warningMsg');
-const forgivenScreen= document.getElementById('forgivenScreen');
-const letterModal   = document.getElementById('letterModal');
-const closeModalBtn = document.getElementById('closeModalBtn');
+function dodgeTimeButton(event) {
+  event.preventDefault();
+  event.stopPropagation();
+  const bounds = letterModal.getBoundingClientRect();
+  const width = Math.min(timeButton.offsetWidth, 200, bounds.width - 32);
+  const height = timeButton.offsetHeight;
+  const current = timeButton.getBoundingClientRect();
+  const pointerX = event.clientX ?? current.left + current.width / 2;
+  const pointerY = event.clientY ?? current.top + current.height / 2;
+  const left = Math.max(0, bounds.left) + 16;
+  const top = Math.max(0, bounds.top) + 60;
+  const right = Math.max(left, Math.min(window.innerWidth, bounds.right) - width - 16);
+  const bottom = Math.max(top, Math.min(window.innerHeight, bounds.bottom) - height - 16);
+  const yesBounds = yesButton.getBoundingClientRect();
+  const candidates = [];
 
-// ---- Open letter on envelope click ----
-document.getElementById('envelopeWrapper').addEventListener('click', () => {
-  // 1. Flip flap open
-  envelopeFlap.classList.add('open');
+  // Include every corner so a distant escape remains available on small screens.
+  for (const x of [left, (left + right) / 2, right]) {
+    for (const y of [top, (top + bottom) / 2, bottom]) {
+      const overlapsYes = x < yesBounds.right + 8 && x + width > yesBounds.left - 8 &&
+        y < yesBounds.bottom + 8 && y + height > yesBounds.top - 8;
+      if (!overlapsYes) candidates.push({ x, y });
+    }
+  }
+  candidates.sort((a, b) => {
+    const distanceA = Math.hypot(a.x + width / 2 - pointerX, a.y + height / 2 - pointerY);
+    const distanceB = Math.hypot(b.x + width / 2 - pointerX, b.y + height / 2 - pointerY);
+    return distanceB - distanceA;
+  });
+  const destination = candidates[0] ?? { x: left, y: top };
+  timeButton.style.width = `${width}px`;
+  timeButton.style.left = `${destination.x}px`;
+  timeButton.style.top = `${destination.y}px`;
+  timeButton.classList.add('escaping');
+}
 
-  // 2. Show full letter modal popup overlay smoothly
-  setTimeout(() => {
-    letterModal.classList.add('show');
-  }, 400);
+timeButton.addEventListener('pointerenter', dodgeTimeButton);
+timeButton.addEventListener('pointerdown', dodgeTimeButton);
+timeButton.addEventListener('click', dodgeTimeButton);
+timeButton.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter' || event.key === ' ') dodgeTimeButton(event);
 });
+window.addEventListener('resize', resetTimeButton);
+letterModal.addEventListener('scroll', resetTimeButton);
 
-// Close modal when clicking close button or background overlay
-closeModalBtn.addEventListener('click', () => {
-  letterModal.classList.remove('show');
-});
+function openLetter(event) {
+  if (opening || letterModal.open) return;
+  opening = true;
+  lastOpener = event.currentTarget;
+  envelopeButton.classList.add('opening');
+  window.setTimeout(() => {
+    letterModal.showModal();
+    document.body.style.overflow = 'hidden';
+    letterModal.scrollTop = 0;
+    closeButton.focus({ preventScroll: true });
+    opening = false;
+  }, reducedMotion.matches ? 0 : 650);
+}
 
-letterModal.addEventListener('click', (e) => {
-  if (e.target === letterModal) {
-    letterModal.classList.remove('show');
+envelopeButton.addEventListener('click', openLetter);
+openTextButton.addEventListener('click', openLetter);
+closeButton.addEventListener('click', () => letterModal.close());
+letterModal.addEventListener('click', (event) => {
+  if (event.target !== letterModal) return;
+  const bounds = letterModal.getBoundingClientRect();
+  if (event.clientX < bounds.left || event.clientX > bounds.right ||
+      event.clientY < bounds.top || event.clientY > bounds.bottom) {
+    letterModal.close();
   }
 });
-
-// ---- No button ----
-function handleNo() {
-  noClickCount++;
-
-  // Shake "Không" button
-  btnNo.classList.remove('shake');
-  void btnNo.offsetWidth; // reflow to restart animation
-  btnNo.classList.add('shake');
-
-  // Show warning message
-  warningMsg.classList.add('show');
-
-  // Make the Yes button grow bigger each time (max 1.4×)
-  const scale = Math.min(1 + noClickCount * 0.08, 1.4);
-  btnYes.style.transform = `scale(${scale})`;
-
-  // Move the No button randomly to avoid it
-  moveNoButton();
-}
-
-function moveNoButton() {
-  const maxX = 100;
-  const maxY = 30;
-  const x = (Math.random() * maxX * 2 - maxX).toFixed(0);
-  const y = (Math.random() * maxY * 2 - maxY).toFixed(0);
-  btnNo.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-  btnNo.style.transform  = `translate(${x}px, ${y}px) scale(${Math.max(1 - noClickCount * 0.07, 0.5)})`;
-  btnNo.style.opacity    = Math.max(1 - noClickCount * 0.12, 0.2);
-}
-
-// Remove shake class after animation
-btnNo.addEventListener('animationend', () => {
-  btnNo.classList.remove('shake');
+letterModal.addEventListener('close', () => {
+  resetTimeButton();
+  clearTimeout(celebrationTimer);
+  letterModal.querySelector('.flower-garden')?.remove();
+  document.body.style.overflow = '';
+  envelopeButton.classList.remove('opening');
+  lastOpener.focus({ preventScroll: true });
 });
 
-// ---- Yes button ----
-function handleYes() {
-  letterModal.classList.remove('show');
-  launchConfetti();
-  setTimeout(() => {
-    forgivenScreen.classList.add('show');
-  }, 200);
+function showReply(title, message) {
+  const heading = document.createElement('strong');
+  heading.textContent = title;
+  reply.replaceChildren(heading, document.createTextNode(message));
+  reply.hidden = false;
+  reply.scrollIntoView({ behavior: reducedMotion.matches ? 'instant' : 'smooth', block: 'nearest' });
 }
 
-// ---- Confetti burst ----
-function launchConfetti() {
-  const colors = ['#ff4d6d', '#ff758f', '#ffc2ce', '#ffb3c6', '#ff85a1', '#c9184a', '#fff', '#ffe4ec'];
-  for (let i = 0; i < 80; i++) {
-    const el = document.createElement('div');
-    el.className = 'confetti-piece';
-    el.style.cssText = `
-      left: ${Math.random() * 100}vw;
-      top: ${-10 + Math.random() * 30}px;
-      background: ${colors[Math.floor(Math.random() * colors.length)]};
-      width: ${6 + Math.random() * 10}px;
-      height: ${6 + Math.random() * 10}px;
-      border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
-      animation-duration: ${1.5 + Math.random() * 2}s;
-      animation-delay: ${Math.random() * 0.8}s;
-    `;
-    document.body.appendChild(el);
-    el.addEventListener('animationend', () => el.remove());
+yesButton.addEventListener('click', () => {
+  resetTimeButton();
+  showReply('Cảm ơn em, Thảo Nhi.', 'Anh sẽ trân trọng cơ hội này và cố gắng từng ngày, bằng những điều anh làm. Thương em thật nhiều.');
+  celebrate();
+});
+
+function celebrate() {
+  clearTimeout(celebrationTimer);
+  letterModal.querySelector('.flower-garden')?.remove();
+  const garden = document.createElement('div');
+  garden.className = 'flower-garden';
+  garden.setAttribute('aria-hidden', 'true');
+
+  for (let i = 0; i < 18; i++) {
+    const flower = document.createElement('span');
+    flower.className = `flower ${i % 2 === 0 ? 'tulip' : 'rose'}`;
+    flower.style.left = `${2 + i * 96 / 17}%`;
+    flower.style.setProperty('--height', `${100 + Math.random() * 140}px`);
+    flower.style.setProperty('--delay', `${i * .09}s`);
+    flower.style.setProperty('--lean', `${Math.random() * 20 - 10}deg`);
+    flower.style.setProperty('--hue', `${i % 3 * 12 - 12}deg`);
+    flower.innerHTML = '<span class="flower-stem"></span><span class="flower-leaf leaf-left"></span><span class="flower-leaf leaf-right"></span><span class="flower-head"><span class="petal petal-one"></span><span class="petal petal-two"></span><span class="petal petal-three"></span><span class="petal petal-four"></span><span class="petal petal-five"></span></span>';
+    garden.appendChild(flower);
   }
+  for (let i = 0; i < 28; i++) {
+    const petal = document.createElement('span');
+    petal.className = 'falling-petal';
+    petal.style.left = `${Math.random() * 100}%`;
+    petal.style.setProperty('--delay', `${Math.random() * 3}s`);
+    petal.style.setProperty('--drift', `${Math.random() * 140 - 70}px`);
+    garden.appendChild(petal);
+  }
+  letterModal.appendChild(garden);
+  celebrationTimer = window.setTimeout(() => {
+    garden.remove();
+  }, 12000);
 }
 
-// ---- Floating hearts background ----
 function spawnHeart() {
-  const heartsBg = document.getElementById('heartsBg');
-  const emojis   = ['❤️', '💕', '💖', '💗', '💓', '💝', '🌸'];
-  const el        = document.createElement('span');
-  el.className    = 'heart-particle';
-  el.textContent  = emojis[Math.floor(Math.random() * emojis.length)];
-  el.style.left   = `${Math.random() * 100}%`;
-  el.style.fontSize = `${0.8 + Math.random() * 1.2}rem`;
-  const dur       = 6 + Math.random() * 8;
-  el.style.animationDuration  = `${dur}s`;
-  el.style.animationDelay     = `${Math.random() * 4}s`;
-  heartsBg.appendChild(el);
-  setTimeout(() => el.remove(), (dur + 4) * 1000);
+  if (reducedMotion.matches || document.hidden || letterModal.open) return;
+  const heart = document.createElement('span');
+  heart.className = 'particle';
+  heart.textContent = '♡';
+  heart.style.left = `${Math.random() * 100}%`;
+  heart.style.fontSize = `${12 + Math.random() * 12}px`;
+  particles.appendChild(heart);
+  window.setTimeout(() => heart.remove(), 12000);
 }
-
-// Spawn hearts continuously
-(function initHearts() {
-  for (let i = 0; i < 14; i++) spawnHeart();
-  setInterval(spawnHeart, 900);
-})();
+spawnHeart();
+window.setInterval(spawnHeart, 2400);
