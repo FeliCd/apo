@@ -25,20 +25,33 @@ function playLetterMusic() {
   musicPlayer.playVideo();
 }
 
-function showMusicError() {
+function showMusicError(code) {
+  musicReady = false;
   musicToggle.disabled = true;
   musicToggle.textContent = 'Nhạc chưa tải được';
-  musicStatus.textContent = 'Em có thể nhấn “Nghe trên YouTube” để nghe bài hát từ 2:06 nhé.';
+  musicStatus.textContent = code === 153
+    ? 'Trình duyệt đang chặn thông tin trang nguồn. Em có thể nghe từ 2:06 bằng liên kết YouTube bên dưới.'
+    : 'Em có thể nhấn “Nghe trên YouTube” để nghe bài hát từ 2:06 nhé.';
 }
 
-const musicLoadTimeout = window.setTimeout(showMusicError, 15000);
+let musicLoadTimeout;
 
 window.onYouTubeIframeAPIReady = () => {
+  // Set the referrer policy before loading the iframe, so the first request identifies this page.
+  const frame = document.createElement('iframe');
+  frame.id = 'musicPlayer';
+  frame.title = 'Hối hận trong anh — Tuấn Hưng';
+  frame.referrerPolicy = 'strict-origin-when-cross-origin';
+  frame.allow = 'autoplay; encrypted-media; fullscreen; picture-in-picture';
+  frame.allowFullscreen = true;
+  const embedUrl = new URL('https://www.youtube.com/embed/0IOeflQmFYI');
+  embedUrl.search = new URLSearchParams({
+    enablejsapi: '1', playsinline: '1', start: String(chorusStart),
+    rel: '0', controls: '1', origin: window.location.origin
+  }).toString();
+  frame.src = embedUrl.href;
+  document.getElementById('musicPlayer').replaceWith(frame);
   musicPlayer = new YT.Player('musicPlayer', {
-    width: '100%',
-    height: '100%',
-    videoId: '0IOeflQmFYI',
-    playerVars: { playsinline: 1, start: chorusStart, rel: 0, controls: 1 },
     events: {
       onReady(event) {
         clearTimeout(musicLoadTimeout);
@@ -62,9 +75,9 @@ window.onYouTubeIframeAPIReady = () => {
       onAutoplayBlocked() {
         musicStatus.textContent = 'Chạm “Phát nhạc” hoặc nút phát trong video để nghe cùng anh nhé.';
       },
-      onError() {
+      onError(event) {
         clearTimeout(musicLoadTimeout);
-        showMusicError();
+        showMusicError(event.data);
       }
     }
   });
@@ -90,7 +103,14 @@ musicApi.addEventListener('error', () => {
   clearTimeout(musicLoadTimeout);
   showMusicError();
 });
-document.head.appendChild(musicApi);
+if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+  musicLoadTimeout = window.setTimeout(showMusicError, 20000);
+  document.head.appendChild(musicApi);
+} else {
+  document.querySelector('.music-player').hidden = true;
+  musicToggle.textContent = 'Mở bản web để nghe nhạc';
+  musicStatus.textContent = 'Bản xem từ tệp trên máy không phát được YouTube. Hãy mở trang bằng địa chỉ web, hoặc nghe qua liên kết YouTube.';
+}
 
 function resetTimeButton() {
   timeButton.classList.remove('escaping');

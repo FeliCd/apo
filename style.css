@@ -1,9 +1,9 @@
 :root {
-  color-scheme: light;
-  --paper: #fffaf3;
-  --ink: #642c38;
-  --muted: #987c78;
-  --wine: #84384b;
+  color-scheme: dark;
+  --paper: #192c3d;
+  --ink: #f8e7ee;
+  --muted: #bac5d5;
+  --wine: #f0b4cb;
   --body: 'Nunito', sans-serif;
   --serif: 'Cormorant Garamond', Georgia, serif;
 }
@@ -16,7 +16,7 @@ body {
   margin: 0;
   min-width: 280px;
   min-height: 100svh;
-  background: #f6eee5;
+  background: radial-gradient(ellipse at 50% 0%, #293858 0%, #101f34 45%, #0b1727 100%);
   color: var(--ink);
   font-family: var(--body);
 }
@@ -25,7 +25,11 @@ body::before {
   content: '';
   position: fixed;
   inset: 16px;
-  border: 1px solid #a7795a26;
+  border: 0;
+  background-image: radial-gradient(circle, #d5defa99 1px, transparent 1.5px), radial-gradient(circle, #f4cee866 1px, transparent 2px);
+  background-size: 97px 131px, 173px 197px;
+  background-position: 13px 29px, 71px 43px;
+  opacity: .45;
   pointer-events: none;
   z-index: 1;
 }
@@ -46,13 +50,13 @@ button:focus-visible {
   border-radius: 50%;
   filter: blur(60px);
   pointer-events: none;
-  z-index: -1;
+  z-index: 0;
 }
 
 .ambient-one {
   width: 55vw;
   height: 60vh;
-  background: #e6bdba40;
+  background: #7366bb40;
   top: -20vh;
   right: -10vw;
 }
@@ -60,12 +64,14 @@ button:focus-visible {
 .ambient-two {
   width: 45vw;
   height: 55vh;
-  background: #e6cda14a;
+  background: #cc7fa033;
   bottom: 0;
   left: -15vw;
 }
 
 .scene {
+  position: relative;
+  z-index: 1;
   min-height: 100svh;
   padding: 65px 24px 32px;
   display: flex;
@@ -126,7 +132,7 @@ h1 span {
   display: block;
   transform: rotate(-5deg);
   transition: transform .6s ease;
-  filter: drop-shadow(0 22px 20px #77513924);
+  filter: drop-shadow(0 24px 30px #00000055);
 }
 
 .envelope-wrapper:hover .envelope, .envelope-wrapper:focus-visible .envelope {
@@ -136,7 +142,7 @@ h1 span {
 .envelope-back {
   position: absolute;
   inset: 0;
-  background: #d6b4a5;
+  background: #65728f;
   border-radius: 5px;
 }
 
@@ -148,7 +154,7 @@ h1 span {
   height: 92%;
   padding: 25px;
   background: var(--paper);
-  border: 1px solid #dfcabb;
+  border: 1px solid #8694b2;
   transform: rotate(3deg);
   transition: transform .65s ease;
   text-align: left;
@@ -161,7 +167,7 @@ h1 span {
   display: block;
   width: 70%;
   height: 1px;
-  background: #cdb9ab80;
+  background: #adc0da60;
   margin-top: 14px;
 }
 
@@ -173,7 +179,7 @@ h1 span {
 .envelope-front {
   position: absolute;
   inset: 0;
-  background: linear-gradient(150deg, #edd4c4, #e1bca8);
+  background: linear-gradient(150deg, #a4b0d2, #7d8bad);
   clip-path: polygon(0 0, 50% 46%, 100% 0, 100% 100%, 0 100%);
   border-radius: 4px;
   z-index: 3;
@@ -183,14 +189,14 @@ h1 span {
   content: '';
   position: absolute;
   inset: 0;
-  background: #f0d6c4;
+  background: #aab7d7;
   clip-path: polygon(0 100%, 50% 42%, 100% 100%);
 }
 
 .envelope-flap {
   position: absolute;
   inset: 0 0 46%;
-  background: linear-gradient(#edcfbb, #e5c1ac);
+  background: linear-gradient(#bac5e2, #8f9fc2);
   clip-path: polygon(0 0, 100% 0, 50% 100%);
   transform-origin: top;
   transition: transform .65s ease;
@@ -203,7 +209,7 @@ h1 span {
   left: 0;
   right: 0;
   z-index: 5;
-  color: #986b59;
+  color: #303e60;
   font-family: var(--serif);
   font-size: 19px;
   font-style: italic;
@@ -274,8 +280,8 @@ h1 span {
   width: min(680px, calc(100% - 28px));
   max-height: 90svh;
   padding: 0;
-  border: 1px solid #dac3b0;
-  border-radius: 9px;
+  border: 1px solid #7185a44d;
+  border-radius: 24px;
   background: var(--paper);
   color: var(--ink);
   box-shadow: 0 35px 100px #321e2938;
@@ -286,7 +292,7 @@ h1 span {
 }
 
 .letter-dialog::backdrop {
-  background: #38242b66;
+  background: #030911b8;
   backdrop-filter: blur(7px);
 }
 
@@ -301,7 +307,7 @@ h1 span {
   margin: 12px 12px 0 0;
   width: 36px;
   height: 36px;
-  border: 1px solid #dbc4b4;
+  border: 1px solid #7185a44d;
   border-radius: 50%;
   background: var(--paper);
   color: var(--wine);
@@ -324,7 +330,7 @@ h2 {
 }
 
 .letter-body {
-  color: #65504b;
+  color: #d6deea;
   font-size: 13px;
   line-height: 2.05;
 }
@@ -336,7 +342,7 @@ h2 {
 blockquote {
   font: italic 500 26px/1.45 var(--serif);
   color: var(--wine);
-  border-left: 2px solid #c19079;
+  border-left: 2px solid #e6aac6;
   margin: 27px 0;
   padding-left: 21px;
 }
@@ -359,7 +365,7 @@ blockquote {
 }
 
 .response {
-  border-top: 1px solid #dfcbb8;
+  border-top: 1px solid #8598ba40;
   padding-top: 24px;
   text-align: center;
 }
@@ -391,11 +397,11 @@ blockquote {
 .button-primary {
   background: var(--wine);
   border: 1px solid var(--wine);
-  color: #fff7ef;
+  color: #182639;
 }
 
 .button-primary:hover {
-  background: #6d2b3d;
+  background: #ffd2e3;
 }
 
 .button-primary span {
@@ -406,14 +412,14 @@ blockquote {
 .button-secondary {
   background: transparent;
   color: var(--wine);
-  border: 1px solid #d8bcae;
+  border: 1px solid #8194b36b;
 }
 
 .reply {
   margin-top: 20px;
   padding: 18px;
   border-radius: 6px;
-  background: #f2e5da;
+  background: #263b51;
   font-size: 12px;
   line-height: 1.9;
 }
@@ -528,7 +534,7 @@ blockquote {
   z-index: 8;
   margin: 0;
   background: var(--paper);
-  box-shadow: 0 6px 20px #642c3826;
+  box-shadow: 0 6px 20px #f8e7ee26;
   transform: none;
   transition: none;
 }
@@ -821,7 +827,7 @@ blockquote {
 .letter-music {
   margin: 30px 0;
   padding: 24px 0;
-  border-top: 1px solid #dfcbb8;
+  border-top: 1px solid #8598ba40;
 }
 
 .music-title {
@@ -840,7 +846,7 @@ blockquote {
   min-height: 200px;
   aspect-ratio: 16 / 9;
   margin: 16px 0;
-  background: #eadbd0;
+  background: #101e2e;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -878,4 +884,31 @@ blockquote {
   cursor: default;
   opacity: .65;
   transform: none;
+}
+
+.moon {
+  display: block;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fff2d9, #e9bfcb);
+  box-shadow: 0 0 45px #f5c9d845, 0 0 100px #e2c5ee20;
+}
+
+h1 {
+  text-shadow: 0 4px 40px #f4bdd528;
+}
+
+.letter-dialog {
+  background: linear-gradient(160deg, #22364b, #142536);
+}
+
+.letter-peek {
+  background: #e4e9f5;
+  color: #334462;
+}
+
+.music-player[hidden] {
+  display: none;
 }
