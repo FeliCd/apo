@@ -10,6 +10,87 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 let opening = false;
 let lastOpener = envelopeButton;
 let celebrationTimer;
+const musicToggle = document.getElementById('musicToggle');
+const musicStatus = document.getElementById('musicStatus');
+const chorusStart = 126;
+let musicPlayer;
+let musicReady = false;
+let musicRequested = false;
+
+function playLetterMusic() {
+  musicRequested = true;
+  if (!musicReady) return;
+  musicPlayer.seekTo(chorusStart, true);
+  musicPlayer.unMute();
+  musicPlayer.playVideo();
+}
+
+function showMusicError() {
+  musicToggle.disabled = true;
+  musicToggle.textContent = 'Nhạc chưa tải được';
+  musicStatus.textContent = 'Em có thể nhấn “Nghe trên YouTube” để nghe bài hát từ 2:06 nhé.';
+}
+
+const musicLoadTimeout = window.setTimeout(showMusicError, 15000);
+
+window.onYouTubeIframeAPIReady = () => {
+  musicPlayer = new YT.Player('musicPlayer', {
+    width: '100%',
+    height: '100%',
+    videoId: '0IOeflQmFYI',
+    playerVars: { playsinline: 1, start: chorusStart, rel: 0, controls: 1 },
+    events: {
+      onReady(event) {
+        clearTimeout(musicLoadTimeout);
+        musicReady = true;
+        event.target.getIframe().title = 'Hối hận trong anh — Tuấn Hưng';
+        musicToggle.disabled = false;
+        musicToggle.textContent = 'Phát nhạc';
+        if (musicRequested) playLetterMusic();
+      },
+      onStateChange(event) {
+        const playing = event.data === YT.PlayerState.PLAYING;
+        if (playing && !musicRequested) {
+          event.target.pauseVideo();
+          return;
+        }
+        musicToggle.textContent = playing ? 'Tạm dừng nhạc' : 'Phát nhạc';
+        if (playing) musicStatus.textContent = 'Đang phát bài hát dành cho em.';
+        if (event.data === YT.PlayerState.PAUSED) musicStatus.textContent = 'Nhạc đang tạm dừng.';
+        if (event.data === YT.PlayerState.ENDED) musicStatus.textContent = 'Nhấn “Phát nhạc” để nghe lại từ 2:06.';
+      },
+      onAutoplayBlocked() {
+        musicStatus.textContent = 'Chạm “Phát nhạc” hoặc nút phát trong video để nghe cùng anh nhé.';
+      },
+      onError() {
+        clearTimeout(musicLoadTimeout);
+        showMusicError();
+      }
+    }
+  });
+};
+
+musicToggle.addEventListener('click', () => {
+  if (!musicReady) return;
+  if (musicPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
+    musicPlayer.pauseVideo();
+    return;
+  }
+  if (musicPlayer.getPlayerState() === YT.PlayerState.ENDED) {
+    musicPlayer.seekTo(chorusStart, true);
+  }
+  musicPlayer.unMute();
+  musicPlayer.playVideo();
+});
+
+const musicApi = document.createElement('script');
+musicApi.src = 'https://www.youtube.com/iframe_api';
+musicApi.async = true;
+musicApi.addEventListener('error', () => {
+  clearTimeout(musicLoadTimeout);
+  showMusicError();
+});
+document.head.appendChild(musicApi);
 
 function resetTimeButton() {
   timeButton.classList.remove('escaping');
@@ -66,6 +147,8 @@ letterModal.addEventListener('scroll', resetTimeButton);
 function openLetter(event) {
   if (opening || letterModal.open) return;
   opening = true;
+  // Keep playback in the opening gesture for mobile browsers.
+  playLetterMusic();
   lastOpener = event.currentTarget;
   envelopeButton.classList.add('opening');
   window.setTimeout(() => {
@@ -89,6 +172,8 @@ letterModal.addEventListener('click', (event) => {
   }
 });
 letterModal.addEventListener('close', () => {
+  musicRequested = false;
+  if (musicReady) musicPlayer.pauseVideo();
   resetTimeButton();
   clearTimeout(celebrationTimer);
   letterModal.querySelector('.flower-garden')?.remove();
@@ -107,7 +192,7 @@ function showReply(title, message) {
 
 yesButton.addEventListener('click', () => {
   resetTimeButton();
-  showReply('Cảm ơn em, Thảo Nhi.', 'Anh sẽ trân trọng cơ hội này và cố gắng từng ngày, bằng những điều anh làm. Thương em thật nhiều.');
+  showReply('Thương em nhất, Thảo Nhi.', 'Gửi em một vườn hoa và một cái ôm thật chặt. Anh sẽ chăm chút cho tình yêu của chúng mình bằng những điều nhỏ bé mỗi ngày.');
   celebrate();
 });
 

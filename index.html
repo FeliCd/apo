@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#f6eee5" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
   <meta name="description" content="Một lá thư gửi Thảo Nhi, với tất cả sự chân thành của anh." />
   <title>Gửi Thảo Nhi — Từ tận lòng anh</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -20,7 +21,7 @@
     <header class="intro">
       <p class="eyebrow">MỘT LÁ THƯ GỬI RIÊNG EM</p>
       <h1>Thảo Nhi<span>thương mến,</span></h1>
-      <p class="intro-text">Có những điều anh muốn nói,<br />bằng tất cả sự chân thành.</p>
+      <p class="intro-text">Gửi cô gái anh thương nhất,<br />và những điều anh muốn em luôn nhớ.</p>
     </header>
 
     <button class="envelope-wrapper" id="openLetter" aria-label="Mở lá thư gửi Thảo Nhi" aria-haspopup="dialog">
@@ -44,15 +45,27 @@
         <p class="eyebrow">GỬI NGƯỜI ANH THƯƠNG</p>
         <h2 id="letterTitle">Thảo Nhi của anh,</h2>
         <div class="letter-body">
-          <p>Anh xin lỗi em nhiều, vì những sai lầm non nớt trước đó của mình đã và đang làm ảnh hưởng đến em của hiện tại.</p>
-          <p>Nhưng anh cũng biết anh may mắn đến nhường nào khi anh được em yêu thương trong khi bản thân không xứng đáng được như thế. Anh cũng biết là anh sai nhiều nhưng thật sự là anh đang cố gắng từng ngày, từng ngày để tốt lên, để xứng đáng với em.</p>
-          <blockquote>Anh xin thề với em là trong đầu, trong tim, trong lòng, trong tâm can của anh chỉ có duy nhất mỗi em.</blockquote>
-          <p>Chuyện của quá khứ anh đã gác lại và mong muốn hướng đến một tương lai cùng em.</p>
-          <p>Anh mong em bình tĩnh lại hơn, an tâm lại hơn và tiếp tục theo dõi hành trình cố gắng thay đổi của anh.</p>
+          <p>Thảo Nhi ơi, cô người yêu của anh xinh lắm, em có biết không? Anh thích nụ cười của em, thích ánh mắt em, thích cả những nét rất riêng khiến anh cứ muốn ngắm em thêm một chút. Với anh, được yêu em là một điều thật may mắn.</p>
+          <p>Anh thương sự dịu dàng của em, thương cách em quan tâm và dành tình cảm cho anh. Những điều em làm cho anh, dù nhỏ thôi, anh đều trân trọng. Em có một trái tim đáng quý, và anh muốn chăm sóc trái tim ấy bằng tất cả sự chân thành của mình.</p>
+          <p>Anh biết lúc này em đang dỗi, đang buồn và còn nhiều điều chưa yên tâm về anh. Anh xin lỗi vì đã khiến người anh thương phải có những cảm giác ấy. Anh muốn được nghe em nói hết những điều làm em tủi thân, để hiểu em hơn và biết mình cần sửa điều gì.</p>
+          <blockquote>Anh yêu em thật lòng, Thảo Nhi à. Anh muốn em cảm nhận được tình yêu ấy trong cách anh đối xử với em mỗi ngày.</blockquote>
+          <p>Anh muốn là người em có thể kể chuyện vui, chuyện buồn, cả những chuyện vụn vặt trong ngày. Muốn hỏi hôm nay em có mệt không, muốn lắng nghe em, muốn cùng em đi qua những ngày bình thường mà vẫn thấy thương nhau thật nhiều.</p>
+          <p>Anh hiểu niềm tin cần thời gian và những việc làm cụ thể. Anh sẽ tập lắng nghe kỹ hơn, giữ những lời mình đã hứa và quan tâm đến cảm xúc của em nhiều hơn. Em cứ nói với anh điều em cần nhé, anh muốn chúng mình cùng hiểu nhau hơn từng chút một.</p>
+          <p>Cô gái đáng yêu của anh xứng đáng được yêu thương thật tử tế. Anh mong nụ cười lại trở về trên môi em, và mong mình sẽ có thêm thật nhiều ngày được ở bên nhau. Thương em nhiều lắm, Thảo Nhi của anh.</p>
         </div>
         <div class="signature"><span>Thương em thật nhiều,</span><strong>Anh</strong></div>
+        <section class="letter-music" aria-label="Bài hát dành cho em">
+          <p class="music-title">Một bài hát gửi em</p>
+          <p class="music-caption">Hối hận trong anh · Tuấn Hưng</p>
+          <div class="music-player"><div id="musicPlayer"></div></div>
+          <div class="music-controls">
+            <button class="button button-secondary" id="musicToggle" disabled>Đang tải nhạc…</button>
+            <a href="https://www.youtube.com/watch?v=0IOeflQmFYI&amp;t=126s" target="_blank" rel="noopener noreferrer">Nghe trên YouTube ↗</a>
+          </div>
+          <p class="music-status" id="musicStatus" role="status">Bài hát bắt đầu từ 2:06 khi em mở thư.</p>
+        </section>
         <section class="response" aria-label="Lời hồi đáp">
-          <p class="response-prompt">Anh mong được cùng em bước tiếp.</p>
+          <p class="response-prompt">Cho anh gửi em một cái ôm thật lâu nhé.</p>
           <div class="actions">
             <button class="button button-primary" id="btnYes">Em tha lỗi cho anh <span aria-hidden="true">♡</span></button>
             <span class="time-button-slot"><button class="button button-secondary" id="btnNo">Em cần thêm thời gian</button></span>
